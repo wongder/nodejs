@@ -272,6 +272,144 @@ const amount2 = currency(0.1).add(0.2);
 console.log(`Currency amount2 is ${amount2}`);
 
 
+// Folds
+const fetch = require('node-fetch');
+const SOURCE_URL = 'https://www.reddit.com/r/reactiongifs.json';
+
+fetch(SOURCE_URL)
+  .then(response => response.json())
+  .then(fold)
+  .catch(err => console.error(`Fold error: ${err}`));
+
+function fold(json) {
+  // here's where we deal with the data
+  console.log(`Fold output: ${JSON.stringify(json.data.children)}`);
+  //console.log(`Fold output: ${json.data.children[1].data.title}`);
+}
 
 
+// Revealing Module Pattern
+const module1 = (() => {
+  //private
+  let color = 'red';
+  let model;
+  function setModel(m) { model = m; }
+  let privatePrice = 800;
+  let getModel = function (m) {
+    setModel(m);
+    return model;
+  };
+  // public
+  return {
+    price: privatePrice,
+    model: getModel
+  }
+})();
+
+console.log(`Revealing module pattern price is ${module1.price}`); // 800
+console.log(`Revealing module pattern model is ${module1.model('audi')}`); // audi
+
+
+// Async/await promise all
+const util = require('util');
+const promisifyGetGoals = util.promisify(getGoals);
+const promisifyGetAccounts = util.promisify(getAccounts);
+
+(async () => {
+  const [goals, accounts] = await Promise.all([
+    promisifyGetGoals(2000),
+    promisifyGetAccounts(500)
+  ]);
+  console.log(`Async await promisify all goals are: ${JSON.stringify(goals)}`);
+  console.log(`Async await promisify all accounts are: ${JSON.stringify(accounts)}`);
+})();
+
+function getGoals(delay, callback) {
+  const id = setInterval(() => {
+    callback(null, {
+      Goals: {
+        Retirement: [
+          { goalId: 12345, goalDesc: 'Retirement goal 1' },
+          { goalId: 67890, goalDesc: 'Retirement goal 2' }
+        ]
+      }
+    });
+    clearInterval(id);
+    console.log('Async await promisify waiting')
+  }, Number(delay));
+}
+function getAccounts(delay, callback) {
+  const id = setInterval(() => {
+    callback(null, {
+      Accounts: {
+        Investment: [
+          { accountId: 43210, accountDesc: 'Canadian Equity' },
+          { accountId: 98765, accountDesc: 'US Equity' }
+        ]
+      }
+    });
+    clearInterval(id);
+    console.log('Async await promisify waiting')
+  }, Number(delay));
+}
+
+
+// Simulate promise finally with final then cuz finally doesn't take any parameters
+const promisifyGetNumber = util.promisify(getNumber);
+
+function getNumber(delay, callback) {
+  const id = setInterval(() => {
+    callback(null, delay);
+    clearInterval(id);
+    console.log('Async await promisify waiting')
+  }, Number(delay));
+}
+
+promisifyGetNumber(2000).then(resolve => resolve / 1)
+// promisifyGetNumber(2000).then(resolve => resolve / a)
+                        .then(resolve => { console.log(`Chain simulate promise is ${resolve}`); return resolve * 2 })
+                        .catch(err => console.error(`Chain simulate promise fold error: ${err}`))
+                        .then(resolve => console.log('Chain simulate promise printing again is', resolve));
+
+
+// Classes
+class Dinosaur{
+  constructor(color){
+    this._color = color;
+  }
+}
+//Brontosaurus inherits from Dinosaur class using the extends keywords
+class Brontosaurus extends Dinosaur{
+  constructor(color,isHerbivore, legs, length){
+    //super must be implemented before the child class properties.
+    super(color)
+    //here we are assigning new properties to our child class
+    this._herbivore= isHerbivore;
+    this._legs = legs;
+    this._length= length;
+  }
+
+  get color(){
+    return this._color.toUpperCase();
+  }
+  get isHerbivore(){
+    return this._herbivore;
+  }
+  get legs (){
+    return this._legs;
+  }
+  set length (length){
+    this._length = length;
+  }
+  get length(){
+    return this._length;
+  }
+}
+
+const bront = new Brontosaurus("Purple",true, 4, 25);
+console.log(`Class dino with bronto color is ${bront.color}`);//PURPLE
+console.log(`Class dino with bronto diet is ${bront.isHerbivore}`);//true
+console.log(`Class dino with bronto has ${bront.legs} legs`);
+bront.length = 29;
+console.log(`Class dino with bronto is ${bront.length} long`);
 

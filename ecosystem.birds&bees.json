@@ -1,0 +1,13 @@
+{
+  "apps": [
+    {
+      "name": "appBirds&Bees",
+      "env": {
+        "DEBUG": "express:*"
+      },
+      "script": "appBirds&Bees.js",
+      "wait_ready": true,
+      "listen_timeout": 10000
+    }
+  ]
+}

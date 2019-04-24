@@ -1,0 +1,22 @@
+{
+  "apps": [
+    {
+      "name": "dwong-scratch",
+      "env": {
+        "USERTIME_ZONE": "America/Toronto",
+        "MAL_CODE": "WIPP",
+        "ENVIRONMENT": "local",
+        "NODE_VENDOR": "Red Hat",
+        "NODE_VERSION": "8.9.4",
+        "PM2_VERSION": "2.10.3",
+        "NODE_ENV": "production",
+        "LOG_LOCATION": "C://Users/wongd52/IdeaProjects/com-td-api-wealth-wipp-node8/"
+      },
+      "script": "scratch9.js","cwd": "C://Users/wongd52/IdeaProjects/com-td-api-wealth-wipp-node8/",
+      "error_file": "dwong-scratch_err.log",
+      "out_file": "dwong-scratch_out.log",
+      "exec_mode": "cluster",
+      "instances": "2"
+    }
+  ]
+}
